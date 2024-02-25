@@ -7,7 +7,6 @@
 #include <WiFiClientSecure.h>
 #include <WiFiClientSecureBearSSL.h>
 #include <AccelStepper.h>
-
 //Setup Wifi and HTTPS
 BearSSL::WiFiClientSecure httpsClient;
 const char *ssid = "1819_Guest";
@@ -40,12 +39,12 @@ String findText(String input, String keyword, int read) {
   return input.substring(start, start + read);
 }
 
+
 void setup() {
   // Initialize Serial Monitor
   Serial.begin(115200);
 
-
-  //Setup Stepper 1 Attributes
+//Setup Stepper 1 Attributes
   stepper1.setMaxSpeed(3500.0);
   stepper1.setAcceleration(100.0);
   stepper1.setSpeed(3500);
@@ -65,17 +64,21 @@ void setup() {
   timeClient.setTimeOffset(-18000);
 }
 
+void rotate_180() {
+  int curr_position = stepper1.currentPosition();
+  Serial.println(curr_position);
+}
+
 //Rotate Stepper 1
 void rotate(int n) {
   for(int i =0; i<n;i++)
   {
-  stepper1.moveTo(end);
-  //Serial.println(stepper1.currentPosition());
-  if(stepper1.currentPosition()==end)
-  {
-  stepper1.setCurrentPosition(0);
-  a=false;
-  }
+    stepper1.moveTo(end);
+    Serial.println(stepper1.currentPosition());
+    if(stepper1.currentPosition()==end)
+    {
+      stepper1.setCurrentPosition(0);
+    }
   }
 }
 
@@ -86,14 +89,23 @@ void loop() {
   //Save Surrent Hour and Minute
   int currentHour = timeClient.getHours();
   int currentMinute = timeClient.getMinutes();
+  String scurrentHour = "";
+  String scurrentMinute = "";
+  if(currentHour<10){
+    scurrentHour = "0" + String(currentHour);
+  }else scurrentHour = String(currentHour);
+  if(currentMinute<10){
+    scurrentMinute = "0" + String(currentMinute);
+  } else scurrentMinute = String(currentMinute); 
 
   //Uses NTP to Find, Save and Print Current Time
-  String formaltime = currentHour + ":" + currentMinute;
-  Serial.print(currentHour);  
+  String formaltime = scurrentHour + ":" + scurrentMinute;
+  Serial.println();
+  Serial.print(scurrentHour);  
   Serial.print(":");
-  Serial.println(currentMinute);  
+  Serial.println(scurrentMinute);  
 
-  HTTPClient https;  
+    HTTPClient https;  
     https.begin(httpsClient, "https://baymax.kintone.com/k/v1/record.json?app=1&id=1"); 
     https.addHeader("X-Cybozu-API-Token", "BYJglQu3jRqJcVbGrjZ8h3Q4tWkBXZzVdPGUauOX"); 
     int httpCode = https.GET();                                       
@@ -101,8 +113,8 @@ void loop() {
       payload = https.getString();
     }
     https.end(); 
-
   //Declare Strings to Be Found in the Json Payload
+   //Declare Strings to Be Found in the Json Payload
   String ft0 = "Time_0\":{\"type\":\"TIME\",\"value\":\"";
   String ft1 = "Time_1\":{\"type\":\"TIME\",\"value\":\"";
   String ft2 = "Time_2\":{\"type\":\"TIME\",\"value\":\"";
@@ -114,13 +126,12 @@ void loop() {
   String t2 = findText(payload, ft2, 5);
   String nump = findText (payload, fnump, 1);
 
-  //Print all Values to Serial Console for Debugging
+  
   Serial.println(t0);
   Serial.println(t1);
   Serial.println(t2);
   Serial.println(nump);
   Serial.println("");
-  
   //Determine if medicine must dispense
   if(formaltime.equals(t0) || t1.equals(t1) || formaltime.equals(t2)){
     for (int i = 1; i <= nump.toInt(); i++){
