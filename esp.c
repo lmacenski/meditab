@@ -107,7 +107,7 @@ void loop() {
 
     HTTPClient https;  
     https.begin(httpsClient, "https://baymax.kintone.com/k/v1/record.json?app=1&id=1"); 
-    https.addHeader("X-Cybozu-API-Token", "BYJglQu3jRqJcVbGrjZ8h3Q4tWkBXZzVdPGUauOX"); 
+    https.addHeader("X-Cybozu-API-Token", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); 
     int httpCode = https.GET();                                       
     if (httpCode > 0) { 
       payload = https.getString();
