@@ -6,8 +6,8 @@
 Leveraging the capabilities of an ESP8266, which interfaces with the Kintone API every minute, we have developed a device that can accurately administer medication at specified intervals. The Kintone API allows physicians to swiftly adjust both the timing and dosage of each administration. Upon continuing this project, we envision designing a tablet interface to enhance patient notifications, allow the user to chat with their doctors and provide a simple line of contact between the doctor and patient. 
 
 Our device currently utilizes an stepper motor in combination with an esp8266 to accurately take one pill from a gravity fed system and dispense them into an easy to access tray.
-![alt text](https://github.com/lmacenski/meditab/blob/main/Assets/topview.png?raw=true)
-![alt text](https://github.com/lmacenski/meditab/blob/main/Assets/sideview.png?raw=true)
+![alt text](https://github.com/lmacenski/meditab/blob/main/Assets/topview.jpg?raw=true)
+![alt text](https://github.com/lmacenski/meditab/blob/main/Assets/sideview.jpg?raw=true)
 
 
 ### **Doctor View:**
